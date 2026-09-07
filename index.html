@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ascent">
+<meta name="theme-color" content="#12151b">
+<title>Ascent — 90 Day System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12151b; --panel:#1a1f27; --panel-2:#212733; --line:#2a3040;
+    --gold:#d9a441; --gold-dim:#8a6f34; --teal:#4a9d95; --red:#c1553f;
+    --text:#ece9e2; --muted:#8b8f99; --faint:#565b66;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;padding:26px 16px 60px;min-height:100vh;}
+  .wrap{max-width:660px;margin:0 auto;}
+
+  .summit{position:relative;padding:18px 0 24px;border-bottom:1px solid var(--line);margin-bottom:18px;}
+  .summit-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .summit-label{font-size:12px;letter-spacing:0.04em;color:var(--muted);margin-bottom:6px;}
+  .summit-day{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:42px;line-height:1;display:flex;align-items:baseline;gap:10px;}
+  .summit-day span.total{font-size:19px;color:var(--faint);font-weight:500;}
+  .camp{text-align:right;}
+  .camp-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--gold);}
+  .camp-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+  .streak{font-size:11px;color:var(--muted);margin-top:2px;}
+  .streak b{color:var(--red);font-family:'Space Grotesk',sans-serif;}
+  .ridge{margin-top:14px;width:100%;height:38px;}
+  .ridge svg{width:100%;height:100%;display:block;}
+  .xpbar-wrap{margin-top:10px;height:6px;background:var(--panel-2);border-radius:4px;overflow:hidden;}
+  .xpbar-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:4px;transition:width .3s;}
+
+  .tabs{display:flex;gap:6px;margin-bottom:16px;}
+  .tab{flex:1;text-align:center;padding:9px;border-radius:8px;font-size:12px;font-weight:500;color:var(--muted);background:var(--panel);border:1px solid var(--line);cursor:pointer;}
+  .tab.active{background:var(--panel-2);color:var(--text);border-color:var(--gold-dim);}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 18px 6px;margin-bottom:16px;}
+  .card h2{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin:0 0 14px;display:flex;justify-content:space-between;align-items:center;}
+  .card h2 .datepick{font-family:'Inter',sans-serif;font-weight:500;font-size:12px;color:var(--muted);}
+  .datepick input{background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:5px 8px;font-family:'Inter',sans-serif;font-size:12px;}
+  .section-tag{font-size:10.5px;letter-spacing:0.03em;color:var(--faint);margin:14px 0 2px;text-transform:none;}
+
+  .row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);gap:12px;}
+  .row:last-of-type{border-bottom:none;}
+  .row-label{display:flex;align-items:center;gap:11px;font-size:14px;}
+  .row-label .xp{font-size:10px;color:var(--faint);}
+  .check{width:20px;height:20px;border:1.5px solid var(--faint);border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s, background .15s;}
+  .check.on{background:var(--teal);border-color:var(--teal);}
+  .check.on::after{content:'';width:9px;height:5px;border-left:2px solid #0c1210;border-bottom:2px solid #0c1210;transform:rotate(-45deg) translate(1px,-1px);}
+
+  .num{display:flex;align-items:center;gap:6px;}
+  .num input{width:52px;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:6px 6px;text-align:center;font-family:'Space Grotesk',sans-serif;font-size:14px;}
+  .num input:focus{outline:1.5px solid var(--gold);}
+  .num .unit{font-size:12px;color:var(--muted);}
+  .target{font-size:11px;color:var(--faint);margin-left:2px;}
+
+  textarea{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:10px;font-family:'Inter',sans-serif;font-size:13px;resize:vertical;min-height:44px;margin:8px 0 14px;}
+  .fieldlabel{font-size:11px;color:var(--muted);margin-bottom:-2px;letter-spacing:0.02em;}
+
+  .weekgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px;}
+  .daychip{aspect-ratio:1;border-radius:7px;background:var(--panel-2);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--muted);gap:3px;}
+  .daychip .d{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--text);}
+  .daychip.full{background:rgba(74,157,149,0.18);border-color:var(--teal);}
+  .daychip.part{background:rgba(217,164,65,0.14);border-color:var(--gold-dim);}
+  .daychip.none{opacity:0.5;}
+  .daychip.future{opacity:0.25;}
+
+  .statline{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line);}
+  .statline:last-child{border-bottom:none;}
+  .statline .v{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--gold);}
+
+  .campstrip{display:flex;overflow-x:auto;gap:8px;padding-bottom:6px;margin-bottom:6px;}
+  .campnode{flex-shrink:0;width:84px;text-align:center;padding:10px 6px;border-radius:8px;background:var(--panel-2);border:1px solid var(--line);}
+  .campnode.done{border-color:var(--teal);}
+  .campnode.current{border-color:var(--gold);background:rgba(217,164,65,0.1);}
+  .campnode .cn{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;}
+  .campnode .cx{font-size:9px;color:var(--faint);margin-top:2px;}
+
+  button.primary{width:100%;background:var(--gold);color:#1a1206;border:none;border-radius:8px;padding:13px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;cursor:pointer;margin:6px 0 18px;}
+  button.primary:active{opacity:0.85;}
+  button.ghost{width:100%;background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:11px;font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;margin-bottom:10px;}
+
+  .emailout,.promptout{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:14px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;color:var(--muted);max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .emailout.open,.promptout.open{max-height:800px;margin-bottom:16px;}
+
+  .foot{text-align:center;font-size:11px;color:var(--faint);margin-top:8px;}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--panel-2);border:1px solid var(--gold-dim);color:var(--text);padding:9px 16px;border-radius:20px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="summit">
+    <div class="summit-top">
+      <div>
+        <div class="summit-label">THE ASCENT</div>
+        <div class="summit-day">Day <span id="dayNum">—</span><span class="total">/ 90</span></div>
+      </div>
+      <div class="camp">
+        <div class="camp-name" id="campName">Trailhead</div>
+        <div class="camp-sub" id="xpTotal">0 XP</div>
+        <div class="streak">Streak <b id="streakNum">0</b></div>
+      </div>
+    </div>
+    <div class="ridge"><svg id="ridgeSvg" viewBox="0 0 620 38" preserveAspectRatio="none"></svg></div>
+    <div class="xpbar-wrap"><div class="xpbar-fill" id="xpFill" style="width:0%;"></div></div>
+  </div>
+
+  <div class="card" id="startCard" style="display:none;">
+    <h2>Set your day 1</h2>
+    <div class="fieldlabel">Start date of the reset</div>
+    <div style="padding:10px 0;">
+      <input type="date" id="startDateInput" style="background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:8px;font-family:'Inter',sans-serif;">
+    </div>
+    <button class="primary" id="setStartBtn">Begin</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-view="today">Today</div>
+    <div class="tab" data-view="week">This week</div>
+    <div class="tab" data-view="history">All time</div>
+  </div>
+
+  <div class="view active" id="view-today">
+    <div class="card">
+      <h2>Today <span class="datepick"><input type="date" id="todayInput"></span></h2>
+
+      <div class="section-tag">Morning</div>
+      <div class="row"><div class="row-label"><div class="check" id="chk_wake"></div> Woke on time</div></div>
+      <div class="row">
+        <div class="row-label"><div class="check" id="chk_sun"></div> Morning sunlight</div>
+        <div class="num"><input type="number" id="min_sun" min="0" max="60"><span class="unit">min</span></div>
+      </div>
+
+      <div class="section-tag">Body</div>
+      <div class="row">
+        <div class="row-label"><div class="check" id="chk_workout"></div> Workout</div>
+        <div class="num"><input type="number" id="min_workout" min="0" max="300"><span class="unit">min</span><span class="target">/60</span></div>
+      </div>
+      <div class="row">
+        <div class="row-label"><div class="check" id="chk_physio"></div> Physio</div>
+        <div class="num"><input type="number" id="min_physio" min="0" max="300"><span class="unit">min</span><span class="target">/60</span></div>
+      </div>
+
+      <div class="section-tag">Mind</div>
+      <div class="row"><div class="row-label"><div class="check" id="chk_breath"></div> Physiological sigh session</div></div>
+      <div class="row">
+        <div class="row-label"><div class="check" id="chk_nsdr"></div> NSDR / deep rest</div>
+        <div class="num"><input type="number" id="min_nsdr" min="0" max="60"><span class="unit">min</span></div>
+      </div>
+      <div class="row">
+        <div class="row-label"><div class="check" id="chk_reading"></div> Reading</div>
+        <div class="num"><input type="number" id="min_reading" min="0" max="300"><span class="unit">min</span><span class="target">/60</span></div>
+      </div>
+
+      <div class="section-tag">Mind & Spirit</div>
+      <div class="row">
+        <div class="row-label"><div class="check" id="chk_still"></div> Stillness / reflection practice</div>
+        <div class="num"><input type="number" id="min_still" min="0" max="120"><span class="unit">min</span></div>
+      </div>
+      <div class="fieldlabel">Currently reading</div>
+      <input type="text" id="txt_book" placeholder="Book / source title" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:13px;margin:6px 0 12px;">
+      <div class="fieldlabel">Depth log, one thing I actually went to the bottom of today</div>
+      <textarea id="note_depth" placeholder="Not what you read, what you now understand well enough to teach."></textarea>
+
+      <div class="section-tag">Build & people</div>
+      <div class="row">
+        <div class="row-label">Build hours</div>
+        <div class="num"><input type="number" id="min_build" min="0" max="16" step="0.5"><span class="unit">hrs</span></div>
+      </div>
+      <div class="row"><div class="row-label"><div class="check" id="chk_phone"></div> Phone stayed in the window</div></div>
+      <div class="row">
+        <div class="row-label">People, in person</div>
+        <div class="num"><input type="number" id="min_social" min="0" max="20"><span class="unit">×</span></div>
+      </div>
+
+      <div class="fieldlabel" style="margin-top:10px;">Win of the day</div>
+      <textarea id="note_win" placeholder="One line."></textarea>
+      <div class="fieldlabel">Miss / what slipped</div>
+      <textarea id="note_miss" placeholder="One line, no excuses."></textarea>
+
+      <button class="primary" id="saveBtn">Save today</button>
+    </div>
+  </div>
+
+  <div class="view" id="view-week">
+    <div class="card">
+      <h2>This week</h2>
+      <div class="weekgrid" id="weekGrid"></div>
+      <div class="statline"><span>Days fully hit</span><span class="v" id="s_full">—</span></div>
+      <div class="statline"><span>Avg workout</span><span class="v" id="s_workout">—</span></div>
+      <div class="statline"><span>Avg physio</span><span class="v" id="s_physio">—</span></div>
+      <div class="statline"><span>Avg reading</span><span class="v" id="s_reading">—</span></div>
+      <div class="statline"><span>Sunlight days</span><span class="v" id="s_sun">—</span></div>
+      <div class="statline"><span>Breathwork sessions</span><span class="v" id="s_breath">—</span></div>
+      <div class="statline"><span>Stillness days</span><span class="v" id="s_still">—</span></div>
+      <div class="statline"><span>Depth logs written</span><span class="v" id="s_depth">—</span></div>
+      <div class="statline"><span>Total build hours</span><span class="v" id="s_build">—</span></div>
+      <div class="statline"><span>In person contacts</span><span class="v" id="s_social">—</span></div>
+      <button class="primary" id="emailBtn">Generate family email</button>
+      <div class="emailout" id="emailOut"></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-history">
+    <div class="card">
+      <h2>The route</h2>
+      <div class="campstrip" id="campStrip"></div>
+      <div class="statline"><span>Days logged</span><span class="v" id="h_days">—</span></div>
+      <div class="statline"><span>Longest streak</span><span class="v" id="h_streak">—</span></div>
+      <div class="statline"><span>Lifetime XP</span><span class="v" id="h_xp">—</span></div>
+      <div class="statline"><span>Total build hours</span><span class="v" id="h_build">—</span></div>
+      <div class="statline"><span>Total sunlight sessions</span><span class="v" id="h_sun">—</span></div>
+      <div class="statline"><span>Total breathwork sessions</span><span class="v" id="h_breath">—</span></div>
+      <div class="statline"><span>Total NSDR minutes</span><span class="v" id="h_nsdr">—</span></div>
+      <div class="statline"><span>Total stillness days</span><span class="v" id="h_still">—</span></div>
+      <div class="statline"><span>Total depth logs</span><span class="v" id="h_depth">—</span></div>
+      <div class="statline"><span>People seen, all time</span><span class="v" id="h_social">—</span></div>
+    </div>
+    <div class="card">
+      <h2>Daily prompt for scheduled tasks</h2>
+      <div class="fieldlabel">Paste this into a Claude Desktop scheduled task set to run once daily.</div>
+      <button class="primary" id="promptBtn">Show the prompt</button>
+      <div class="promptout" id="promptOut"></div>
+    </div>
+
+    <div class="card">
+      <h2>Sync from Google Sheet</h2>
+      <div class="fieldlabel">Option A: paste a published CSV link (Sheet &gt; File &gt; Share &gt; Publish to web &gt; CSV, select the Ascent 90 Day Log tab)</div>
+      <div style="padding:8px 0;">
+        <input type="text" id="sheetUrl" placeholder="https://docs.google.com/.../pub?output=csv" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:12.5px;">
+      </div>
+      <button class="primary" id="fetchSyncBtn">Fetch & sync</button>
+
+      <div class="fieldlabel" style="margin-top:6px;">Option B: if the link fetch fails, select all rows in the sheet, copy, and paste here instead</div>
+      <textarea id="pasteArea" placeholder="Paste sheet rows here" style="min-height:80px;"></textarea>
+      <button class="primary" id="pasteSyncBtn">Import pasted rows</button>
+      <div class="fieldlabel" id="syncStatus" style="margin-bottom:14px;"></div>
+    </div>
+  </div>
+
+  <button class="ghost" id="resetBtn">Reset all data</button>
+  <div class="foot">Data lives on this device's browser storage. It won't sync to another phone or browser, and clearing site data or browser history will erase it. Nothing auto-deletes otherwise.</div>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+// Local storage shim, mirrors the artifact storage API so the rest of the app
+// didn't need to change. Data lives in this browser's localStorage, on this device.
+const storage = {
+  async get(key){
+    const v = localStorage.getItem(key);
+    if(v === null) throw new Error('not found');
+    return {key, value: v};
+  },
+  async set(key, value){
+    localStorage.setItem(key, value);
+    return {key, value};
+  },
+  async delete(key){
+    localStorage.removeItem(key);
+    return {key, deleted: true};
+  },
+  async list(prefix){
+    const p = prefix || '';
+    const keys = Object.keys(localStorage).filter(k => k.startsWith(p));
+    return {keys};
+  }
+};
+
+const CAMPS = [
+  {name:'Trailhead', xp:0},
+  {name:'Basecamp', xp:300},
+  {name:'Camp 1', xp:800},
+  {name:'Camp 2', xp:1500},
+  {name:'Camp 3', xp:2500},
+  {name:'High Camp', xp:3800},
+  {name:'Summit Push', xp:5500},
+  {name:'Summit', xp:7500}
+];
+let currentDate = new Date().toISOString().slice(0,10);
+let startDate = null;
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1400);
+}
+function dateStr(d){return d.toISOString().slice(0,10);}
+function addDays(dateISO, n){
+  const d = new Date(dateISO+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  return dateStr(d);
+}
+function dayIndex(dateISO){
+  if(!startDate) return null;
+  const a = new Date(startDate+'T00:00:00');
+  const b = new Date(dateISO+'T00:00:00');
+  return Math.round((b-a)/86400000)+1;
+}
+
+function dayXP(data){
+  if(!data) return 0;
+  const checks = ['wake','sun','workoutDone','physioDone','breath','nsdrDone','readingDone','still','phone'];
+  let xp = 0;
+  checks.forEach(k=>{ if(data[k]) xp += 10; });
+  if(data.depth && data.depth.trim().length > 15) xp += 15;
+  xp += (data.build||0)*5;
+  xp += (data.social||0)*5;
+  return Math.round(xp);
+}
+function hitCount(data){
+  if(!data) return 0;
+  const checks = ['wake','sun','workoutDone','physioDone','breath','nsdrDone','readingDone','still','phone'];
+  return checks.filter(k=>data[k]).length;
+}
+
+async function loadStart(){
+  try{
+    const r = await storage.get('reset:start', false);
+    startDate = r.value;
+  }catch(e){ startDate = null; }
+  if(!startDate){
+    document.getElementById('startCard').style.display='block';
+    document.getElementById('startDateInput').value = new Date().toISOString().slice(0,10);
+  }else{
+    document.getElementById('startCard').style.display='none';
+  }
+}
+
+function renderRidge(idx){
+  const svg = document.getElementById('ridgeSvg');
+  const pct = idx ? Math.min(Math.max(idx/90,0),1) : 0;
+  const w=620,h=38;
+  const peakX = 40 + pct*(w-80);
+  const path = `M0,${h} L${peakX*0.3},${h-6} L${peakX*0.65},${h-15} L${peakX},4 L${peakX*1.15},${h-11} L${w},${h-2} L${w},${h} Z`;
+  svg.innerHTML = `
+    <path d="${path}" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+    <path d="M0,${h} L${peakX*0.3},${h-6} L${peakX*0.65},${h-15} L${peakX},4" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${peakX}" cy="4" r="4" fill="var(--gold)"/>
+  `;
+}
+
+function setCheck(id, on){
+  const el = document.getElementById(id);
+  el.classList.toggle('on', !!on);
+  el.dataset.on = on ? '1':'0';
+}
+function getCheck(id){ return document.getElementById(id).dataset.on === '1'; }
+['chk_wake','chk_sun','chk_workout','chk_physio','chk_breath','chk_nsdr','chk_reading','chk_still','chk_phone'].forEach(id=>{
+  document.getElementById(id).addEventListener('click', ()=> setCheck(id, !getCheck(id)));
+});
+
+async function loadDay(dateISO){
+  try{
+    const r = await storage.get('day:'+dateISO, false);
+    return JSON.parse(r.value);
+  }catch(e){ return null; }
+}
+
+async function populateForm(dateISO){
+  const data = await loadDay(dateISO);
+  document.getElementById('todayInput').value = dateISO;
+  setCheck('chk_wake', data?.wake || false);
+  setCheck('chk_sun', data?.sun || false);
+  setCheck('chk_workout', data?.workoutDone || false);
+  setCheck('chk_physio', data?.physioDone || false);
+  setCheck('chk_breath', data?.breath || false);
+  setCheck('chk_nsdr', data?.nsdrDone || false);
+  setCheck('chk_reading', data?.readingDone || false);
+  setCheck('chk_still', data?.still || false);
+  setCheck('chk_phone', data?.phone || false);
+  document.getElementById('min_sun').value = data?.sunMin ?? '';
+  document.getElementById('min_workout').value = data?.workout ?? '';
+  document.getElementById('min_physio').value = data?.physio ?? '';
+  document.getElementById('min_nsdr').value = data?.nsdrMin ?? '';
+  document.getElementById('min_reading').value = data?.reading ?? '';
+  document.getElementById('min_still').value = data?.stillMin ?? '';
+  document.getElementById('txt_book').value = data?.book ?? '';
+  document.getElementById('note_depth').value = data?.depth ?? '';
+  document.getElementById('min_build').value = data?.build ?? '';
+  document.getElementById('min_social').value = data?.social ?? '';
+  document.getElementById('note_win').value = data?.win ?? '';
+  document.getElementById('note_miss').value = data?.miss ?? '';
+}
+
+async function renderTopBar(){
+  const idx = dayIndex(currentDate);
+  document.getElementById('dayNum').textContent = idx && idx>0 ? idx : '—';
+  renderRidge(idx);
+  const all = await allDays();
+  let totalXP = 0;
+  all.forEach(([d,data])=> totalXP += dayXP(data));
+  document.getElementById('xpTotal').textContent = totalXP+' XP';
+  let camp = CAMPS[0], next = CAMPS[1];
+  for(let i=0;i<CAMPS.length;i++){
+    if(totalXP >= CAMPS[i].xp){ camp = CAMPS[i]; next = CAMPS[i+1] || CAMPS[i]; }
+  }
+  document.getElementById('campName').textContent = camp.name;
+  const span = (next.xp - camp.xp) || 1;
+  const pct = camp===next ? 100 : Math.min(100, Math.round(((totalXP-camp.xp)/span)*100));
+  document.getElementById('xpFill').style.width = pct+'%';
+  document.getElementById('streakNum').textContent = currentStreak(all);
+}
+
+async function allDays(){
+  try{
+    const list = await storage.list('day:', false);
+    const out = [];
+    if(list && list.keys){
+      for(const k of list.keys){
+        const r = await storage.get(k, false);
+        try{ out.push([k.replace('day:',''), JSON.parse(r.value)]); }catch(e){}
+      }
+    }
+    out.sort((a,b)=> a[0] < b[0] ? -1 : 1);
+    return out;
+  }catch(e){ return []; }
+}
+
+function currentStreak(all){
+  const map = {};
+  all.forEach(([d,data])=>{ map[d] = hitCount(data)>=7; });
+  let streak = 0;
+  let cursor = new Date().toISOString().slice(0,10);
+  while(map[cursor]){
+    streak++;
+    cursor = addDays(cursor, -1);
+  }
+  return streak;
+}
+function longestStreak(all){
+  const map = {};
+  all.forEach(([d,data])=>{ map[d] = hitCount(data)>=7; });
+  let longest = 0, run = 0;
+  if(all.length===0) return 0;
+  let cursor = all[0][0];
+  const last = all[all.length-1][0];
+  while(cursor <= last){
+    if(map[cursor]){ run++; longest = Math.max(longest, run); } else { run = 0; }
+    cursor = addDays(cursor, 1);
+  }
+  return longest;
+}
+
+document.getElementById('todayInput').addEventListener('change', (e)=>{
+  currentDate = e.target.value;
+  populateForm(currentDate);
+  renderTopBar();
+});
+
+document.getElementById('saveBtn').addEventListener('click', async ()=>{
+  const payload = {
+    wake: getCheck('chk_wake'),
+    sun: getCheck('chk_sun'),
+    workoutDone: getCheck('chk_workout'),
+    physioDone: getCheck('chk_physio'),
+    breath: getCheck('chk_breath'),
+    nsdrDone: getCheck('chk_nsdr'),
+    readingDone: getCheck('chk_reading'),
+    still: getCheck('chk_still'),
+    phone: getCheck('chk_phone'),
+    sunMin: Number(document.getElementById('min_sun').value)||0,
+    workout: Number(document.getElementById('min_workout').value)||0,
+    physio: Number(document.getElementById('min_physio').value)||0,
+    nsdrMin: Number(document.getElementById('min_nsdr').value)||0,
+    reading: Number(document.getElementById('min_reading').value)||0,
+    stillMin: Number(document.getElementById('min_still').value)||0,
+    book: document.getElementById('txt_book').value,
+    depth: document.getElementById('note_depth').value,
+    build: Number(document.getElementById('min_build').value)||0,
+    social: Number(document.getElementById('min_social').value)||0,
+    win: document.getElementById('note_win').value,
+    miss: document.getElementById('note_miss').value
+  };
+  try{
+    const res = await storage.set('day:'+currentDate, JSON.stringify(payload), false);
+    if(!res){ toast('Save failed, try again'); return; }
+    const xp = dayXP(payload);
+    toast('Saved · +'+xp+' XP');
+    renderTopBar();
+    renderWeek();
+  }catch(e){ toast('Save failed, try again'); }
+});
+
+document.getElementById('setStartBtn').addEventListener('click', async ()=>{
+  const val = document.getElementById('startDateInput').value;
+  if(!val) return;
+  try{
+    await storage.set('reset:start', val, false);
+    startDate = val;
+    document.getElementById('startCard').style.display='none';
+    renderTopBar();
+    renderWeek();
+    renderHistory();
+  }catch(e){ toast('Could not save start date'); }
+});
+
+function weekDates(anchorISO){
+  const d = new Date(anchorISO+'T00:00:00');
+  const dow = d.getDay();
+  const mondayOffset = dow===0?-6:1-dow;
+  const monday = addDays(anchorISO, mondayOffset);
+  const arr=[];
+  for(let i=0;i<7;i++) arr.push(addDays(monday,i));
+  return arr;
+}
+
+async function renderWeek(){
+  const dates = weekDates(currentDate);
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  let fullDays=0, wSum=0, pSum=0, rSum=0, bSum=0, sSum=0, sunDays=0, breathCount=0, stillDays=0, depthCount=0, loggedDays=0;
+  const today = new Date().toISOString().slice(0,10);
+  for(const d of dates){
+    const data = await loadDay(d);
+    const chip = document.createElement('div');
+    const label = new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'short'}).slice(0,2);
+    let cls = 'daychip none';
+    if(d > today) cls = 'daychip future';
+    if(data){
+      loggedDays++;
+      wSum += data.workout||0; pSum += data.physio||0; rSum += data.reading||0;
+      bSum += data.build||0; sSum += data.social||0;
+      if(data.sun) sunDays++;
+      if(data.breath) breathCount++;
+      if(data.still) stillDays++;
+      if(data.depth && data.depth.trim().length>15) depthCount++;
+      const hc = hitCount(data);
+      if(hc>=7){cls='daychip full'; fullDays++;}
+      else if(hc>=1){cls='daychip part';}
+    }
+    chip.className = cls;
+    chip.innerHTML = `<div>${label}</div><div class="d">${new Date(d+'T00:00:00').getDate()}</div>`;
+    grid.appendChild(chip);
+  }
+  document.getElementById('s_full').textContent = fullDays+' / 7';
+  document.getElementById('s_workout').textContent = loggedDays? Math.round(wSum/loggedDays)+' min' : '—';
+  document.getElementById('s_physio').textContent = loggedDays? Math.round(pSum/loggedDays)+' min' : '—';
+  document.getElementById('s_reading').textContent = loggedDays? Math.round(rSum/loggedDays)+' min' : '—';
+  document.getElementById('s_sun').textContent = sunDays+' / 7';
+  document.getElementById('s_breath').textContent = breathCount+' sessions';
+  document.getElementById('s_still').textContent = stillDays+' / 7';
+  document.getElementById('s_depth').textContent = depthCount+' this week';
+  document.getElementById('s_build').textContent = bSum.toFixed(1)+' hrs';
+  document.getElementById('s_social').textContent = sSum+' ×';
+  return {fullDays, wSum, pSum, rSum, bSum, sSum, sunDays, breathCount, stillDays, depthCount, loggedDays, dates};
+}
+
+async function renderHistory(){
+  const all = await allDays();
+  let totalXP=0, bSum=0, sunCount=0, breathCount=0, nsdrMin=0, socialSum=0, stillCount=0, depthCount=0;
+  all.forEach(([d,data])=>{
+    totalXP += dayXP(data);
+    bSum += data.build||0;
+    if(data.sun) sunCount++;
+    if(data.breath) breathCount++;
+    if(data.still) stillCount++;
+    if(data.depth && data.depth.trim().length>15) depthCount++;
+    nsdrMin += data.nsdrMin||0;
+    socialSum += data.social||0;
+  });
+  document.getElementById('h_days').textContent = all.length;
+  document.getElementById('h_streak').textContent = longestStreak(all);
+  document.getElementById('h_xp').textContent = totalXP+' XP';
+  document.getElementById('h_build').textContent = bSum.toFixed(1)+' hrs';
+  document.getElementById('h_sun').textContent = sunCount;
+  document.getElementById('h_breath').textContent = breathCount;
+  document.getElementById('h_still').textContent = stillCount;
+  document.getElementById('h_depth').textContent = depthCount;
+  document.getElementById('h_nsdr').textContent = nsdrMin+' min';
+  document.getElementById('h_social').textContent = socialSum;
+
+  const strip = document.getElementById('campStrip');
+  strip.innerHTML = '';
+  CAMPS.forEach(c=>{
+    const node = document.createElement('div');
+    let cls = 'campnode';
+    if(totalXP >= c.xp) cls += ' done';
+    const nextUndone = CAMPS.find(x=>totalXP < x.xp);
+    if(nextUndone && nextUndone.name===c.name) cls += ' current';
+    node.className = cls;
+    node.innerHTML = `<div class="cn">${c.name}</div><div class="cx">${c.xp} XP</div>`;
+    strip.appendChild(node);
+  });
+}
+
+document.getElementById('emailBtn').addEventListener('click', async ()=>{
+  const stats = await renderWeek();
+  const idx = dayIndex(currentDate) || 0;
+  const weekNum = Math.max(1, Math.ceil(idx/7));
+  const avgW = stats.loggedDays? Math.round(stats.wSum/stats.loggedDays):0;
+  const avgP = stats.loggedDays? Math.round(stats.pSum/stats.loggedDays):0;
+  const avgR = stats.loggedDays? Math.round(stats.rSum/stats.loggedDays):0;
+  const text = `Subject: Week ${weekNum} check in
+
+Hi all,
+
+Sharing my week ${weekNum} progress as promised, keeping this consistent every week so you can actually track it.
+
+Consistency
+Days fully on track: ${stats.fullDays} / 7
+Workout avg: ${avgW} min/day
+Physio avg: ${avgP} min/day
+Reading avg: ${avgR} min/day
+Sunlight days: ${stats.sunDays} / 7
+Breathwork sessions: ${stats.breathCount}
+
+Build
+Hours this week: ${stats.bSum.toFixed(1)}
+Key output: [fill in one sentence]
+
+Connection
+In person time with people: ${stats.sSum} instances
+
+Win of the week: [fill in]
+Miss of the week: [fill in]
+Adjustment for next week: [fill in]
+
+Appreciate you all keeping me honest on this.
+
+[Your name]`;
+  const out = document.getElementById('emailOut');
+  out.textContent = text;
+  out.classList.add('open');
+  try{ await navigator.clipboard.writeText(text); toast('Copied to clipboard'); }
+  catch(e){ toast('Email ready below'); }
+});
+
+document.getElementById('promptBtn').addEventListener('click', ()=>{
+  const text = `Check in on my 90 day reset (day ${'{'}current day number{'}'} of 90). My wake target is 7-8am for now, moving earlier over time, so judge against that, not against 6am.
+
+Ask me, in this order, one line each:
+1. Did I wake on time?
+2. Morning sunlight, how many minutes?
+3. Workout minutes
+4. Physio minutes
+5. Physiological sigh breathing session done, yes or no?
+6. NSDR/deep rest minutes
+7. Reading minutes
+8. Build hours on my project
+9. Did my phone stay inside the window I set?
+10. People I saw in person today
+11. One line: win of the day
+12. One line: what slipped
+
+Be blunt. If I had a bad day, say so plainly and call out the pattern if it's a repeat, don't soften it or console me. No participation trophies for a day I didn't earn. Reserve real acknowledgment for days I actually hit it. Then remind me to log these numbers into my Ascent tracker.`;
+  const out = document.getElementById('promptOut');
+  out.textContent = text;
+  out.classList.add('open');
+  navigator.clipboard.writeText(text).then(()=>toast('Copied')).catch(()=>{});
+});
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('view-'+tab.dataset.view).classList.add('active');
+    if(tab.dataset.view==='week') renderWeek();
+    if(tab.dataset.view==='history') renderHistory();
+  });
+});
+
+document.getElementById('resetBtn').addEventListener('click', async ()=>{
+  if(!confirm('This clears every saved day and your start date permanently. Are you sure?')) return;
+  try{
+    const list = await storage.list('day:', false);
+    if(list && list.keys){ for(const k of list.keys) await storage.delete(k, false); }
+    await storage.delete('reset:start', false);
+    startDate = null;
+    toast('Reset');
+    location.reload();
+  }catch(e){ toast('Reset failed'); }
+});
+
+function parseTable(text){
+  const delim = text.includes('\t') ? '\t' : ',';
+  const rows = [];
+  let field='', row=[], inQuotes=false;
+  for(let i=0;i<text.length;i++){
+    const c = text[i];
+    if(inQuotes){
+      if(c === '"'){
+        if(text[i+1] === '"'){ field+='"'; i++; } else { inQuotes=false; }
+      } else field += c;
+    } else {
+      if(c === '"'){ inQuotes = true; }
+      else if(c === delim){ row.push(field); field=''; }
+      else if(c === '\n' || c === '\r'){
+        if(c === '\r' && text[i+1] === '\n') i++;
+        row.push(field); field=''; rows.push(row); row=[];
+      } else field += c;
+    }
+  }
+  if(field.length || row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r => r.some(cell => cell && cell.trim().length));
+}
+
+function normalizeDate(s){
+  s = (s||'').trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  const d = new Date(s);
+  if(isNaN(d)) return null;
+  return d.toISOString().slice(0,10);
+}
+function rowBool(v){
+  const s = (v||'').toString().trim().toLowerCase();
+  return s==='yes' || s==='true' || s==='y' || s==='1';
+}
+
+async function importRows(rows){
+  let start = 0;
+  if(rows[0] && rows[0][0] && rows[0][0].toLowerCase().includes('date')) start = 1;
+  let count = 0;
+  for(let i=start;i<rows.length;i++){
+    const r = rows[i];
+    if(!r[0]) continue;
+    const date = normalizeDate(r[0]);
+    if(!date) continue;
+    const sunMin = Number(r[3])||0, workMin = Number(r[4])||0, physMin = Number(r[5])||0,
+          nsdrMin = Number(r[7])||0, readMin = Number(r[8])||0;
+    const data = {
+      wake: rowBool(r[2]),
+      sun: sunMin > 0,
+      sunMin: sunMin,
+      workoutDone: workMin > 0,
+      workout: workMin,
+      physioDone: physMin > 0,
+      physio: physMin,
+      breath: rowBool(r[6]),
+      nsdrDone: nsdrMin > 0,
+      nsdrMin: nsdrMin,
+      readingDone: readMin > 0,
+      reading: readMin,
+      build: Number(r[9])||0,
+      phone: rowBool(r[10]),
+      social: Number(r[11])||0,
+      win: r[12] || '',
+      miss: r[13] || ''
+    };
+    try{
+      await storage.set('day:'+date, JSON.stringify(data), false);
+      count++;
+    }catch(e){}
+  }
+  return count;
+}
+
+async function afterSync(n){
+  document.getElementById('syncStatus').textContent = n>0 ? n+' day(s) synced into the dashboard.' : 'No valid rows found to sync.';
+  await populateForm(currentDate);
+  await renderTopBar();
+  await renderWeek();
+  await renderHistory();
+  toast(n>0 ? n+' days synced' : 'Nothing synced');
+}
+
+document.getElementById('fetchSyncBtn').addEventListener('click', async ()=>{
+  const url = document.getElementById('sheetUrl').value.trim();
+  if(!url){ toast('Paste the CSV link first'); return; }
+  document.getElementById('syncStatus').textContent = 'Fetching...';
+  try{
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('bad response');
+    const text = await res.text();
+    const rows = parseTable(text);
+    const n = await importRows(rows);
+    await afterSync(n);
+  }catch(e){
+    document.getElementById('syncStatus').textContent = 'Fetch blocked or failed, use the paste option below instead.';
+    toast('Fetch failed, try pasting');
+  }
+});
+
+document.getElementById('pasteSyncBtn').addEventListener('click', async ()=>{
+  const text = document.getElementById('pasteArea').value;
+  if(!text.trim()){ toast('Paste rows first'); return; }
+  const rows = parseTable(text);
+  const n = await importRows(rows);
+  await afterSync(n);
+});
+
+(async function init(){
+  await loadStart();
+  await populateForm(currentDate);
+  await renderTopBar();
+  await renderWeek();
+  await renderHistory();
+})();
+</script>
+</body>
+</html>
