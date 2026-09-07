@@ -144,49 +144,83 @@
       <div class="section-tag">Body</div>
       <div class="row">
         <div class="row-label"><div class="check" id="chk_workout"></div> Workout</div>
-        <div class="num"><input type="number" id="min_workout" min="0" max="300"><span class="unit">min</span><span class="target">/60</span></div>
+        <div class="num"><input type="number" id="min_workout" min="0" max="400"><span class="unit">min</span><span class="target">/200</span></div>
       </div>
+      <select id="sel_sport" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:13px;margin:0 0 12px;">
+        <option value="">Sport / activity</option>
+        <option value="Golf">Golf</option>
+        <option value="Tennis">Tennis</option>
+        <option value="Padel">Padel</option>
+        <option value="Football">Football</option>
+        <option value="Basketball">Basketball</option>
+        <option value="Gym session">Gym session</option>
+        <option value="Other">Other</option>
+      </select>
       <div class="row">
         <div class="row-label"><div class="check" id="chk_physio"></div> Physio</div>
         <div class="num"><input type="number" id="min_physio" min="0" max="300"><span class="unit">min</span><span class="target">/60</span></div>
       </div>
 
       <div class="section-tag">Mind</div>
-      <div class="row"><div class="row-label"><div class="check" id="chk_breath"></div> Physiological sigh session</div></div>
+      <div class="row"><div class="row-label"><div class="check" id="chk_breath"></div> Breathing practice</div></div>
+      <div class="fieldlabel" style="margin:-8px 0 10px;">Two quick inhales through the nose, then one long, slow exhale out. A few rounds, calms your system down fast, use it whenever you feel wound up or reaching for your phone.</div>
       <div class="row">
-        <div class="row-label"><div class="check" id="chk_nsdr"></div> NSDR / deep rest</div>
+        <div class="row-label"><div class="check" id="chk_nsdr"></div> NSDR</div>
         <div class="num"><input type="number" id="min_nsdr" min="0" max="60"><span class="unit">min</span></div>
       </div>
+      <div class="fieldlabel" style="margin:-8px 0 10px;">A guided audio session you lie down and listen to, 10 to 20 minutes, like a nap without actually falling asleep. Good for the afternoon slump. Search "NSDR" on YouTube for free ones.</div>
       <div class="row">
         <div class="row-label"><div class="check" id="chk_reading"></div> Reading</div>
         <div class="num"><input type="number" id="min_reading" min="0" max="300"><span class="unit">min</span><span class="target">/60</span></div>
-      </div>
-
-      <div class="section-tag">Mind & Spirit</div>
-      <div class="row">
-        <div class="row-label"><div class="check" id="chk_still"></div> Stillness / reflection practice</div>
-        <div class="num"><input type="number" id="min_still" min="0" max="120"><span class="unit">min</span></div>
       </div>
       <div class="fieldlabel">Currently reading</div>
       <input type="text" id="txt_book" placeholder="Book / source title" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:13px;margin:6px 0 12px;">
       <div class="fieldlabel">Depth log, one thing I actually went to the bottom of today</div>
       <textarea id="note_depth" placeholder="Not what you read, what you now understand well enough to teach."></textarea>
 
-      <div class="section-tag">Build & people</div>
+      <div class="section-tag">Build</div>
+      <select id="sel_build" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:13px;margin:0 0 10px;">
+        <option value="">What kind of build</option>
+        <option value="Fun project">Fun project</option>
+        <option value="Deep learning">Deep learning</option>
+        <option value="Something new">Something new</option>
+        <option value="Other">Other</option>
+      </select>
       <div class="row">
         <div class="row-label">Build hours</div>
         <div class="num"><input type="number" id="min_build" min="0" max="16" step="0.5"><span class="unit">hrs</span></div>
       </div>
-      <div class="row"><div class="row-label"><div class="check" id="chk_phone"></div> Phone stayed in the window</div></div>
+      <textarea id="note_build" placeholder="What did you actually do."></textarea>
+
+      <div class="section-tag">Work / Study</div>
+      <div class="fieldlabel">What work</div>
+      <input type="text" id="txt_work" placeholder="What you worked on" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:13px;margin:6px 0 10px;">
+      <div class="row">
+        <div class="row-label">Hours worked</div>
+        <div class="num"><input type="number" id="min_hours_worked" min="0" max="16" step="0.5"><span class="unit">hrs</span></div>
+      </div>
+      <div class="fieldlabel">What studied</div>
+      <input type="text" id="txt_study" placeholder="What you studied" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:13px;margin:6px 0 10px;">
+      <div class="row">
+        <div class="row-label">Hours studied</div>
+        <div class="num"><input type="number" id="min_hours_studied" min="0" max="16" step="0.5"><span class="unit">hrs</span></div>
+      </div>
+
+      <div class="section-tag">People</div>
       <div class="row">
         <div class="row-label">People, in person</div>
         <div class="num"><input type="number" id="min_social" min="0" max="20"><span class="unit">×</span></div>
       </div>
+      <div class="fieldlabel">Who</div>
+      <input type="text" id="txt_people" placeholder="Names" style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:9px;font-family:'Inter',sans-serif;font-size:13px;margin:6px 0 12px;">
 
       <div class="fieldlabel" style="margin-top:10px;">Win of the day</div>
       <textarea id="note_win" placeholder="One line."></textarea>
       <div class="fieldlabel">Miss / what slipped</div>
       <textarea id="note_miss" placeholder="One line, no excuses."></textarea>
+
+      <div class="fieldlabel" style="text-align:center;color:var(--gold);font-size:12px;margin:4px 0 4px;">Remember: Deep breathing before you sleep.</div>
+      <div style="text-align:center;margin:0 0 14px;"><a href="https://www.youtube.com/watch?v=j-1n3KJR1I8" target="_blank" style="color:var(--teal);font-size:12px;">Watch: deep breathing before sleep</a></div>
 
       <button class="primary" id="saveBtn">Save today</button>
     </div>
@@ -202,7 +236,6 @@
       <div class="statline"><span>Avg reading</span><span class="v" id="s_reading">—</span></div>
       <div class="statline"><span>Sunlight days</span><span class="v" id="s_sun">—</span></div>
       <div class="statline"><span>Breathwork sessions</span><span class="v" id="s_breath">—</span></div>
-      <div class="statline"><span>Stillness days</span><span class="v" id="s_still">—</span></div>
       <div class="statline"><span>Depth logs written</span><span class="v" id="s_depth">—</span></div>
       <div class="statline"><span>Total build hours</span><span class="v" id="s_build">—</span></div>
       <div class="statline"><span>In person contacts</span><span class="v" id="s_social">—</span></div>
@@ -222,7 +255,6 @@
       <div class="statline"><span>Total sunlight sessions</span><span class="v" id="h_sun">—</span></div>
       <div class="statline"><span>Total breathwork sessions</span><span class="v" id="h_breath">—</span></div>
       <div class="statline"><span>Total NSDR minutes</span><span class="v" id="h_nsdr">—</span></div>
-      <div class="statline"><span>Total stillness days</span><span class="v" id="h_still">—</span></div>
       <div class="statline"><span>Total depth logs</span><span class="v" id="h_depth">—</span></div>
       <div class="statline"><span>People seen, all time</span><span class="v" id="h_social">—</span></div>
     </div>
@@ -312,17 +344,19 @@ function dayIndex(dateISO){
 
 function dayXP(data){
   if(!data) return 0;
-  const checks = ['wake','sun','workoutDone','physioDone','breath','nsdrDone','readingDone','still','phone'];
+  const checks = ['wake','sun','workoutDone','physioDone','breath','nsdrDone','readingDone'];
   let xp = 0;
   checks.forEach(k=>{ if(data[k]) xp += 10; });
   if(data.depth && data.depth.trim().length > 15) xp += 15;
   xp += (data.build||0)*5;
+  xp += (data.hoursWorked||0)*3;
+  xp += (data.hoursStudied||0)*3;
   xp += (data.social||0)*5;
   return Math.round(xp);
 }
 function hitCount(data){
   if(!data) return 0;
-  const checks = ['wake','sun','workoutDone','physioDone','breath','nsdrDone','readingDone','still','phone'];
+  const checks = ['wake','sun','workoutDone','physioDone','breath','nsdrDone','readingDone'];
   return checks.filter(k=>data[k]).length;
 }
 
@@ -358,7 +392,7 @@ function setCheck(id, on){
   el.dataset.on = on ? '1':'0';
 }
 function getCheck(id){ return document.getElementById(id).dataset.on === '1'; }
-['chk_wake','chk_sun','chk_workout','chk_physio','chk_breath','chk_nsdr','chk_reading','chk_still','chk_phone'].forEach(id=>{
+['chk_wake','chk_sun','chk_workout','chk_physio','chk_breath','chk_nsdr','chk_reading'].forEach(id=>{
   document.getElementById(id).addEventListener('click', ()=> setCheck(id, !getCheck(id)));
 });
 
@@ -379,18 +413,23 @@ async function populateForm(dateISO){
   setCheck('chk_breath', data?.breath || false);
   setCheck('chk_nsdr', data?.nsdrDone || false);
   setCheck('chk_reading', data?.readingDone || false);
-  setCheck('chk_still', data?.still || false);
-  setCheck('chk_phone', data?.phone || false);
   document.getElementById('min_sun').value = data?.sunMin ?? '';
   document.getElementById('min_workout').value = data?.workout ?? '';
+  document.getElementById('sel_sport').value = data?.sport ?? '';
   document.getElementById('min_physio').value = data?.physio ?? '';
   document.getElementById('min_nsdr').value = data?.nsdrMin ?? '';
   document.getElementById('min_reading').value = data?.reading ?? '';
-  document.getElementById('min_still').value = data?.stillMin ?? '';
   document.getElementById('txt_book').value = data?.book ?? '';
   document.getElementById('note_depth').value = data?.depth ?? '';
   document.getElementById('min_build').value = data?.build ?? '';
+  document.getElementById('sel_build').value = data?.buildType ?? '';
+  document.getElementById('note_build').value = data?.buildNote ?? '';
+  document.getElementById('txt_work').value = data?.work ?? '';
+  document.getElementById('min_hours_worked').value = data?.hoursWorked ?? '';
+  document.getElementById('txt_study').value = data?.study ?? '';
+  document.getElementById('min_hours_studied').value = data?.hoursStudied ?? '';
   document.getElementById('min_social').value = data?.social ?? '';
+  document.getElementById('txt_people').value = data?.people ?? '';
   document.getElementById('note_win').value = data?.win ?? '';
   document.getElementById('note_miss').value = data?.miss ?? '';
 }
@@ -431,7 +470,7 @@ async function allDays(){
 
 function currentStreak(all){
   const map = {};
-  all.forEach(([d,data])=>{ map[d] = hitCount(data)>=7; });
+  all.forEach(([d,data])=>{ map[d] = hitCount(data)>=5; });
   let streak = 0;
   let cursor = new Date().toISOString().slice(0,10);
   while(map[cursor]){
@@ -442,7 +481,7 @@ function currentStreak(all){
 }
 function longestStreak(all){
   const map = {};
-  all.forEach(([d,data])=>{ map[d] = hitCount(data)>=7; });
+  all.forEach(([d,data])=>{ map[d] = hitCount(data)>=5; });
   let longest = 0, run = 0;
   if(all.length===0) return 0;
   let cursor = all[0][0];
@@ -469,18 +508,23 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
     breath: getCheck('chk_breath'),
     nsdrDone: getCheck('chk_nsdr'),
     readingDone: getCheck('chk_reading'),
-    still: getCheck('chk_still'),
-    phone: getCheck('chk_phone'),
     sunMin: Number(document.getElementById('min_sun').value)||0,
     workout: Number(document.getElementById('min_workout').value)||0,
+    sport: document.getElementById('sel_sport').value,
     physio: Number(document.getElementById('min_physio').value)||0,
     nsdrMin: Number(document.getElementById('min_nsdr').value)||0,
     reading: Number(document.getElementById('min_reading').value)||0,
-    stillMin: Number(document.getElementById('min_still').value)||0,
     book: document.getElementById('txt_book').value,
     depth: document.getElementById('note_depth').value,
     build: Number(document.getElementById('min_build').value)||0,
+    buildType: document.getElementById('sel_build').value,
+    buildNote: document.getElementById('note_build').value,
+    work: document.getElementById('txt_work').value,
+    hoursWorked: Number(document.getElementById('min_hours_worked').value)||0,
+    study: document.getElementById('txt_study').value,
+    hoursStudied: Number(document.getElementById('min_hours_studied').value)||0,
     social: Number(document.getElementById('min_social').value)||0,
+    people: document.getElementById('txt_people').value,
     win: document.getElementById('note_win').value,
     miss: document.getElementById('note_miss').value
   };
@@ -521,7 +565,7 @@ async function renderWeek(){
   const dates = weekDates(currentDate);
   const grid = document.getElementById('weekGrid');
   grid.innerHTML = '';
-  let fullDays=0, wSum=0, pSum=0, rSum=0, bSum=0, sSum=0, sunDays=0, breathCount=0, stillDays=0, depthCount=0, loggedDays=0;
+  let fullDays=0, wSum=0, pSum=0, rSum=0, bSum=0, sSum=0, sunDays=0, breathCount=0, depthCount=0, loggedDays=0;
   const today = new Date().toISOString().slice(0,10);
   for(const d of dates){
     const data = await loadDay(d);
@@ -535,10 +579,9 @@ async function renderWeek(){
       bSum += data.build||0; sSum += data.social||0;
       if(data.sun) sunDays++;
       if(data.breath) breathCount++;
-      if(data.still) stillDays++;
       if(data.depth && data.depth.trim().length>15) depthCount++;
       const hc = hitCount(data);
-      if(hc>=7){cls='daychip full'; fullDays++;}
+      if(hc>=5){cls='daychip full'; fullDays++;}
       else if(hc>=1){cls='daychip part';}
     }
     chip.className = cls;
@@ -551,22 +594,20 @@ async function renderWeek(){
   document.getElementById('s_reading').textContent = loggedDays? Math.round(rSum/loggedDays)+' min' : '—';
   document.getElementById('s_sun').textContent = sunDays+' / 7';
   document.getElementById('s_breath').textContent = breathCount+' sessions';
-  document.getElementById('s_still').textContent = stillDays+' / 7';
   document.getElementById('s_depth').textContent = depthCount+' this week';
   document.getElementById('s_build').textContent = bSum.toFixed(1)+' hrs';
   document.getElementById('s_social').textContent = sSum+' ×';
-  return {fullDays, wSum, pSum, rSum, bSum, sSum, sunDays, breathCount, stillDays, depthCount, loggedDays, dates};
+  return {fullDays, wSum, pSum, rSum, bSum, sSum, sunDays, breathCount, depthCount, loggedDays, dates};
 }
 
 async function renderHistory(){
   const all = await allDays();
-  let totalXP=0, bSum=0, sunCount=0, breathCount=0, nsdrMin=0, socialSum=0, stillCount=0, depthCount=0;
+  let totalXP=0, bSum=0, sunCount=0, breathCount=0, nsdrMin=0, socialSum=0, depthCount=0;
   all.forEach(([d,data])=>{
     totalXP += dayXP(data);
     bSum += data.build||0;
     if(data.sun) sunCount++;
     if(data.breath) breathCount++;
-    if(data.still) stillCount++;
     if(data.depth && data.depth.trim().length>15) depthCount++;
     nsdrMin += data.nsdrMin||0;
     socialSum += data.social||0;
@@ -577,7 +618,6 @@ async function renderHistory(){
   document.getElementById('h_build').textContent = bSum.toFixed(1)+' hrs';
   document.getElementById('h_sun').textContent = sunCount;
   document.getElementById('h_breath').textContent = breathCount;
-  document.getElementById('h_still').textContent = stillCount;
   document.getElementById('h_depth').textContent = depthCount;
   document.getElementById('h_nsdr').textContent = nsdrMin+' min';
   document.getElementById('h_social').textContent = socialSum;
